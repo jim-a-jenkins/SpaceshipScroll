@@ -3,6 +3,7 @@ package com.gamecodeschool.c1tappydefender;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 
 /**
  * Created by jimjenkins on 12/14/17.
@@ -24,6 +25,11 @@ public class PlayerShip {
     private final int MIN_SPEED = 1;
     private final int MAX_SPEED = 20;
 
+    //a hit box for collision detection
+    private Rect hitBox;
+
+    private int shieldStrength;
+
     public PlayerShip(Context context, int screenX, int screenY) {
         boosting = false;
         x = 50;
@@ -33,6 +39,11 @@ public class PlayerShip {
 
         maxY = screenY - bitmap.getHeight();
         minY = 0;
+
+        //init hitbox
+        hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+
+        shieldStrength = 2;
     }
 
     public void update() {
@@ -66,6 +77,16 @@ public class PlayerShip {
         if (y > maxY) {
             y = maxY;
         }
+
+        // Refresh hit box location
+        hitBox.left = x;
+        hitBox.top = y;
+        hitBox.right = x + bitmap.getWidth();
+        hitBox.bottom = y + bitmap.getHeight();
+    }
+
+    public void reduceShieldStrength(){
+        shieldStrength--;
     }
 
     //Getters
@@ -93,6 +114,13 @@ public class PlayerShip {
         boosting = false;
     }
 
+    public Rect getHitBox() {
+        return hitBox;
+    }
+
+    public int getShieldStrength() {
+        return shieldStrength;
+    }
 }
 
 
