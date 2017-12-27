@@ -89,6 +89,13 @@ public class EnemyShip {
         return hitBox;
     }
 
+    public int getCenterX() {
+        return x + bitmap.getWidth()/2;
+    }
+    public int getCenterY() {
+        return y + bitmap.getHeight()/2;
+    }
+
     public void update(int playerSpeed){
         //move to the left
         x -= playerSpeed;

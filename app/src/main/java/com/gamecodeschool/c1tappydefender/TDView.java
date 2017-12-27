@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,6 +19,7 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by jimjenkins on 12/14/17.
@@ -43,6 +46,8 @@ public class TDView extends SurfaceView implements Runnable{
     public EnemyShip enemy4;
     public EnemyShip enemy5;
 
+    public Explosion explosion;
+
     //make space dust
     public ArrayList<SpaceDust> dustList = new ArrayList<SpaceDust>();
 
@@ -51,6 +56,24 @@ public class TDView extends SurfaceView implements Runnable{
     private Canvas canvas;
     private SurfaceHolder ourHolder;
 
+    //for enemy explosions
+    private boolean enemyExp1 = false;
+    private boolean enemyExp2 = false;
+    private boolean enemyExp3 = false;
+    private boolean enemyExp4 = false;
+    private boolean enemyExp5 = false;
+    private int deathCoorX1;
+    private int deathCoorY1;
+    private int deathCoorX2;
+    private int deathCoorY2;
+    private int deathCoorX3;
+    private int deathCoorY3;
+    private int deathCoorX4;
+    private int deathCoorY4;
+    private int deathCoorX5;
+    private int deathCoorY5;
+
+
     private float distanceRemaining;
     private long timeTaken;
     private long timeStarted;
@@ -58,6 +81,7 @@ public class TDView extends SurfaceView implements Runnable{
 
     private Context context;
 
+    //temp change to public to see...
     private boolean gameEnded;
 
     //persistence
@@ -100,18 +124,6 @@ public class TDView extends SurfaceView implements Runnable{
         screenX = x;
         screenY = y;
 
-        //initialize our player ship
-        //player = new PlayerShip(context, x, y);
-        //enemy1 = new EnemyShip(context, x, y);
-        //enemy2 = new EnemyShip(context, x, y);
-        //enemy3 = new EnemyShip(context, x, y);
-
-        //int numSpecs = 40;
-        //for (int i = 0; i < numSpecs; i++) {
-            //SpaceDust spec = new SpaceDust(x, y);
-            //dustList.add(spec);
-        //}
-
         //get a reference file called HiScores, or create one
         prefs = context.getSharedPreferences("HiScores", context.MODE_PRIVATE);
 
@@ -134,30 +146,47 @@ public class TDView extends SurfaceView implements Runnable{
         }
     }
 
+    //canvas.drawBitmap(getExplosion9(), player.getCenterX() - getCenterX(getExplosion9()), player.getCenterY() - getCenterY(getExplosion9()), paint);
+
     private void update(){
         boolean hitDetected = false;
         //collision detection
-        if(Rect.intersects(player.getHitBox(), enemy1.getHitBox())){
+        if(Rect.intersects(player.getHitBox(), enemy1.getHitBox()) && !gameEnded){
             hitDetected = true;
+            enemyExp1 = true;
+            deathCoorX1 = enemy1.getCenterX() - explosion.getCenterX(explosion.getExplosion1());
+            deathCoorY1 = enemy1.getCenterY() - explosion.getCenterY(explosion.getExplosion1());
             enemy1.setX(-100);
         }
-        if(Rect.intersects(player.getHitBox(), enemy2.getHitBox())){
+        if(Rect.intersects(player.getHitBox(), enemy2.getHitBox()) && !gameEnded){
             hitDetected = true;
+            enemyExp2 = true;
+            deathCoorX2 = enemy2.getCenterX() - explosion.getCenterX(explosion.getExplosion2());
+            deathCoorY2 = enemy2.getCenterY() - explosion.getCenterY(explosion.getExplosion2());
             enemy2.setX(-100);
         }
-        if(Rect.intersects(player.getHitBox(), enemy3.getHitBox())){
+        if(Rect.intersects(player.getHitBox(), enemy3.getHitBox()) && !gameEnded){
             hitDetected = true;
+            enemyExp3 = true;
+            deathCoorX3 = enemy3.getCenterX() - explosion.getCenterX(explosion.getExplosion3());
+            deathCoorY3 = enemy3.getCenterY() - explosion.getCenterY(explosion.getExplosion3());
             enemy3.setX(-100);
         }
         if(screenX > 1000){
-            if(Rect.intersects(player.getHitBox(), enemy4.getHitBox())){
+            if(Rect.intersects(player.getHitBox(), enemy4.getHitBox()) && !gameEnded){
                 hitDetected = true;
+                enemyExp4 = true;
+                deathCoorX4 = enemy4.getCenterX() - explosion.getCenterX(explosion.getExplosion4());
+                deathCoorY4 = enemy4.getCenterY() - explosion.getCenterY(explosion.getExplosion4());
                 enemy4.setX(-100);
             }
         }
         if(screenX > 1200){
-            if(Rect.intersects(player.getHitBox(), enemy5.getHitBox())){
+            if(Rect.intersects(player.getHitBox(), enemy5.getHitBox()) && !gameEnded){
                 hitDetected = true;
+                enemyExp5 = true;
+                deathCoorX5 = enemy5.getCenterX() - explosion.getCenterX(explosion.getExplosion5());
+                deathCoorY5 = enemy5.getCenterY() - explosion.getCenterY(explosion.getExplosion5());
                 enemy5.setX(-100);
             }
         }
@@ -224,38 +253,105 @@ public class TDView extends SurfaceView implements Runnable{
             canvas.drawColor(Color.argb(255, 0, 0, 0));
 
             //FOR DEBUGGING
-            //paint.setColor(Color.argb(255,255,255,255));
+            /*
+            paint.setColor(Color.argb(255,255,255,255));
             //draw hitboxes
-            //canvas.drawRect(player.getHitBox().left, player.getHitBox().top, player.getHitBox().right,
-                    //player.getHitBox().bottom, paint);
-            //canvas.drawRect(enemy1.getHitBox().left, enemy1.getHitBox().top, enemy1.getHitBox().right,
-                    //enemy1.getHitBox().bottom, paint);
-            //canvas.drawRect(enemy2.getHitBox().left, enemy2.getHitBox().top, enemy2.getHitBox().right,
-                    //enemy2.getHitBox().bottom, paint);
-            //canvas.drawRect(enemy3.getHitBox().left, enemy3.getHitBox().top, enemy3.getHitBox().right,
-                    //enemy3.getHitBox().bottom, paint);
+            canvas.drawRect(player.getHitBox().left, player.getHitBox().top, player.getHitBox().right,
+                    player.getHitBox().bottom, paint);
+            canvas.drawRect(enemy1.getHitBox().left, enemy1.getHitBox().top, enemy1.getHitBox().right,
+                    enemy1.getHitBox().bottom, paint);
+            canvas.drawRect(enemy2.getHitBox().left, enemy2.getHitBox().top, enemy2.getHitBox().right,
+                    enemy2.getHitBox().bottom, paint);
+            canvas.drawRect(enemy3.getHitBox().left, enemy3.getHitBox().top, enemy3.getHitBox().right,
+                    enemy3.getHitBox().bottom, paint);
+                    */
 
             //draw specs of dust
             paint.setColor(Color.argb(255, 255,255,255));
 
+
             //draw the dust from arraylist
             for (SpaceDust sd : dustList) {
-                canvas.drawPoint(sd.getX(), sd.getY(), paint);
+                if(player.getSpeed() <= 4) {
+                    canvas.drawPoint(sd.getX(), sd.getY(), paint);
+                }
+                else if(player.getSpeed() > 4 && player.getSpeed() <= 8){
+                    canvas.drawLine(sd.getX(), sd.getY(), sd.getX()+5, sd.getY(), paint);
+                }
+                else if(player.getSpeed() > 8 && player.getSpeed() <= 12){
+                    canvas.drawLine(sd.getX(), sd.getY(), sd.getX()+10, sd.getY(), paint);
+                }
+                else if(player.getSpeed() > 12 && player.getSpeed() <= 16){
+                    canvas.drawLine(sd.getX(), sd.getY(), sd.getX()+15, sd.getY(), paint);
+                }
+                else{
+                    canvas.drawLine(sd.getX(), sd.getY(), sd.getX()+20, sd.getY(), paint);
+                }
             }
 
-            //draw player
-            canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+            //draw player if he's alive
+            if(explosion.getExploCounter() > 25) {
+                canvas.drawBitmap(player.getBitmap(), player.getX(), player.getY(), paint);
+            }
+            if(player.isBoosting() && explosion.getExploCounter() > 45){
+                //draw flames to center-left of ship image
+                Bitmap fire1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire1);
+                Bitmap fire2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire2);
+                Bitmap fire3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.fire3);
+
+                Random generator = new Random();
+                int whichBoost = generator.nextInt(3);
+                switch(whichBoost){
+                    case 0:
+                        canvas.drawBitmap(fire1, player.getX()-fire1.getWidth(), player.getY()+fire1.getHeight()/2, paint);
+                        break;
+                    case 1:
+                        canvas.drawBitmap(fire2, player.getX()-fire1.getWidth(), player.getY()+fire1.getHeight()/2, paint);
+                        break;
+                    case 2:
+                        canvas.drawBitmap(fire3, player.getX()-fire1.getWidth(), player.getY()+fire1.getHeight()/2, paint);
+                        break;
+                }
+            }
 
             //draw enemies
             canvas.drawBitmap(enemy1.getBitmap(), enemy1.getX(), enemy1.getY(), paint);
             canvas.drawBitmap(enemy2.getBitmap(), enemy2.getX(), enemy2.getY(), paint);
             canvas.drawBitmap(enemy3.getBitmap(), enemy3.getX(), enemy3.getY(), paint);
-
             if(screenX > 1000){
                 canvas.drawBitmap(enemy4.getBitmap(), enemy4.getX(), enemy4.getY(), paint);
             }
             if(screenX > 1200){
                 canvas.drawBitmap(enemy5.getBitmap(), enemy5.getX(), enemy5.getY(), paint);
+            }
+
+            //blow up enemies if hitting our ship
+            if(enemyExp1){
+                explosion.destroyEnemy(deathCoorX1, deathCoorY1, canvas, paint);
+            }
+            if(enemyExp2){
+                explosion.destroyEnemy(deathCoorX2, deathCoorY2, canvas, paint);
+            }
+            if(enemyExp3){
+                explosion.destroyEnemy(deathCoorX3, deathCoorY3, canvas, paint);
+            }
+            if(screenX > 1000){
+                if(enemyExp4){
+                    explosion.destroyEnemy(deathCoorX4, deathCoorY4, canvas, paint);
+                }
+            }
+            if(screenX > 1200){
+                if(enemyExp5){
+                    explosion.destroyEnemy(deathCoorX5, deathCoorY5, canvas, paint);
+                }
+            }
+            if(explosion.getEnemyCounter() == 0){
+                enemyExp1 = false;
+                enemyExp2 = false;
+                enemyExp3 = false;
+                enemyExp4 = false;
+                enemyExp5 = false;
+                explosion.setEnemyCounter(50);
             }
 
             if(!gameEnded) {
@@ -272,7 +368,14 @@ public class TDView extends SurfaceView implements Runnable{
                 canvas.drawText("Shield:" + player.getShieldStrength(), 10, screenY - 20, paint);
                 canvas.drawText("Speed:" + player.getSpeed() * 60 + "MPS", (screenX / 3) * 2, screenY - 20, paint);
             } else{
-                //show pause screen
+                //show pause screen and disable boosting
+                player.stopBoosting();
+
+                //blow up the ship if you didn't make it
+                if(distanceRemaining > 0) {
+                    explosion.destroyShip(player, canvas, paint);
+                }
+
                 paint.setTextSize(80);
                 paint.setTextAlign(Paint.Align.CENTER);
                 canvas.drawText("Game Over", screenX/2, 100, paint);
@@ -349,6 +452,11 @@ public class TDView extends SurfaceView implements Runnable{
         enemy1 = new EnemyShip(context, screenX, screenY);
         enemy2 = new EnemyShip(context, screenX, screenY);
         enemy3 = new EnemyShip(context, screenX, screenY);
+        //initialize explosions
+        explosion = new Explosion(context);
+
+
+
         if(screenX > 1000) {
             enemy4 = new EnemyShip(context, screenX, screenY);
         }

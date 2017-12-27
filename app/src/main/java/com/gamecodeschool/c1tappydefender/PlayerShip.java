@@ -89,9 +89,13 @@ public class PlayerShip {
         shieldStrength--;
     }
 
-    //Getters
+    //Getters & setters
     public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public int getX() {
@@ -102,8 +106,19 @@ public class PlayerShip {
         return y;
     }
 
+    public int getCenterX() {
+        return x + bitmap.getWidth()/2;
+    }
+    public int getCenterY() {
+        return y + bitmap.getHeight()/2;
+    }
+
     public int getSpeed() {
         return speed;
+    }
+
+    public boolean isBoosting() {
+        return boosting;
     }
 
     public void setBoosting() {
