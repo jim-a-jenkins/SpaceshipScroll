@@ -1,4 +1,4 @@
-package com.gamecodeschool.c1tappydefender;
+package com.jimjenkins.HyperspaceRunner;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -116,7 +116,7 @@ public class EnemyShip {
         hitBox.bottom = y + bitmap.getHeight();
     }
 
-    //this is used by TDView update() method to make an enemy respawn
+    //this is used by HRView update() method to make an enemy respawn
     public void setX(int x) {
         this.x = x;
     }

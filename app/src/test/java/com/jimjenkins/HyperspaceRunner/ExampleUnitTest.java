@@ -1,4 +1,4 @@
-package com.gamecodeschool.c1tappydefender;
+package com.jimjenkins.HyperspaceRunner;
 
 import org.junit.Test;
 

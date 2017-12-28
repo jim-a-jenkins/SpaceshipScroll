@@ -1,4 +1,4 @@
-package com.gamecodeschool.c1tappydefender;
+package com.jimjenkins.HyperspaceRunner;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,7 +25,7 @@ import java.util.Random;
  * Created by jimjenkins on 12/14/17.
  */
 
-public class TDView extends SurfaceView implements Runnable{
+public class HRView extends SurfaceView implements Runnable{
     private SoundPool soundPool;
         int start = -1;
         int bump = -1;
@@ -81,7 +81,6 @@ public class TDView extends SurfaceView implements Runnable{
 
     private Context context;
 
-    //temp change to public to see...
     private boolean gameEnded;
 
     //persistence
@@ -89,11 +88,10 @@ public class TDView extends SurfaceView implements Runnable{
     private SharedPreferences.Editor editor;
 
 
-    public TDView(Context context, int x, int y) {
+    public HRView(Context context, int x, int y) {
         super(context);
         this.context = context;
 
-        //soundpool is deprecated
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
         try{
             //create objects of the 2 required classes
@@ -145,8 +143,6 @@ public class TDView extends SurfaceView implements Runnable{
             control();
         }
     }
-
-    //canvas.drawBitmap(getExplosion9(), player.getCenterX() - getCenterX(getExplosion9()), player.getCenterY() - getCenterY(getExplosion9()), paint);
 
     private void update(){
         boolean hitDetected = false;
@@ -251,20 +247,6 @@ public class TDView extends SurfaceView implements Runnable{
 
             //Rub out the last frame
             canvas.drawColor(Color.argb(255, 0, 0, 0));
-
-            //FOR DEBUGGING
-            /*
-            paint.setColor(Color.argb(255,255,255,255));
-            //draw hitboxes
-            canvas.drawRect(player.getHitBox().left, player.getHitBox().top, player.getHitBox().right,
-                    player.getHitBox().bottom, paint);
-            canvas.drawRect(enemy1.getHitBox().left, enemy1.getHitBox().top, enemy1.getHitBox().right,
-                    enemy1.getHitBox().bottom, paint);
-            canvas.drawRect(enemy2.getHitBox().left, enemy2.getHitBox().top, enemy2.getHitBox().right,
-                    enemy2.getHitBox().bottom, paint);
-            canvas.drawRect(enemy3.getHitBox().left, enemy3.getHitBox().top, enemy3.getHitBox().right,
-                    enemy3.getHitBox().bottom, paint);
-                    */
 
             //draw specs of dust
             paint.setColor(Color.argb(255, 255,255,255));

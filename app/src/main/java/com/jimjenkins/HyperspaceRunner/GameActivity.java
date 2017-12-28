@@ -1,4 +1,4 @@
-package com.gamecodeschool.c1tappydefender;
+package com.jimjenkins.HyperspaceRunner;
 
 import android.app.Activity;
 import android.graphics.Point;
@@ -7,7 +7,7 @@ import android.view.Display;
 import android.view.KeyEvent;
 
 public class GameActivity extends Activity {
-    private TDView gameView;
+    private HRView gameView;
 
     //this is where the play button takes us
     @Override
@@ -19,9 +19,9 @@ public class GameActivity extends Activity {
         Point size = new Point();
         display.getSize(size);
 
-        // Create an instance of TDView
+        // Create an instance of HRView
         //pass in "this" which is the context of our app
-        gameView = new TDView(this, size.x, size.y);
+        gameView = new HRView(this, size.x, size.y);
 
         //make gameView the view for the activity
         setContentView(gameView);

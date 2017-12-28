@@ -1,4 +1,4 @@
-package com.gamecodeschool.c1tappydefender;
+package com.jimjenkins.HyperspaceRunner;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.gamecodeschool.c1tappydefender", appContext.getPackageName());
+        assertEquals("com.jimjenkins.HyperspaceRunner", appContext.getPackageName());
     }
 }
