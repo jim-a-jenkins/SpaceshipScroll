@@ -9,6 +9,7 @@ This game is based on a game called Tappy Defender by John Horton in his book An
 - while boosting, flames shoot out of the ships tailpipe
 - while boosting, the stars begin to stretch as if entering hyperspace
 - once the game is over, enemies no longer strike your ship
+- all artwork has been replaced with open source art
 
 If you have any questions about the game, feel free to reach out to me.
 
